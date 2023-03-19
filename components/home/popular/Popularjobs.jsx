@@ -10,35 +10,38 @@ import useFetch from '../../../hook/useFetch'
 const Popularjobs = () => {
   const router = useRouter();
 
-  const { data, isLoading, error } = useFetch
-  ('search',
-    {
-      query: 'React developer',
-      num_pages: 1
-    })
+  const { data, isLoading, error, refetch} = useFetch('search',{
+    query: 'React developer',
+    num_pages: 1
+  })
+  
+  const [selectedJob, setSelectedJob] = useState()
 
-    console.log(data)
+  const handleCardPress = (item) => {
 
+  }
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}> Popular Jobs</Text>
         <TouchableOpacity>
-          <Text style={styles.headerBtn}> Show all</Text>
+          <Text style={styles.headerBtn} onPress={refetch}> Show all</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.cardsContainer}>
         {isLoading ? (
           <ActivityIndicator size="large" colors={COLORS.primary} />
-        ) : error ? (
-          <Text>Something went wrong</Text>
-        ) : (
+        ) : error ? (<Text>Ceva nu e okeke</Text>) : (
           <FlatList 
             data={data}
             renderItem={({ item }) => (
               <PopularJobCard 
                 item ={item}
+                selectedJob={selectedJob}
+                handleCardPress={handleCardPress}
               />
             )}
             keyExtractor={item => item?.job_id}
